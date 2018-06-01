@@ -83,28 +83,38 @@ class Board extends React.Component {
       <Square
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i)}
+        key={i}
       />
     );
   }
 
   render() {
+    let i = 0;
+
+    // using for loops
+    // let board = [];
+    // for (let r = 0; r < 3; r++) {
+    //   let row = [];
+    //   for (let c = 0; c < 3; c++) {
+    //     row.push(this.renderSquare(i++));
+    //   }
+    //   board.push(<div className="board-row" key={r}>{row}</div>)
+    // }
+
+    // using rendering of arrays
+    const board = this.props.squares.slice(0, 3).map((key, idx) => {
+      // using ( instead of { right away is shorthand for 'return this'
+      const row = this.props.squares.slice(0, 3).map((key, idx) => (
+        this.renderSquare(i++)
+      ));
+      return (
+        <div className="board-row" key={idx}>{row}</div>
+      );
+    });
+
     return (
       <div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
+        {board}
       </div>
     );
   }
@@ -146,18 +156,24 @@ class Game extends React.Component {
     });
   }
 
+  renderMoveDesc(move) {
+    const description = move ?
+      move === this.state.stepNumber ?
+      <b>{'Go to move #' + move}</b> :
+      'Go to move #' + move :
+      'Go to game start';
+    return description;
+  }
+
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
 
     const moves = history.map((step, move) => {
-      const description = move ?
-        'Go to move #' + move :
-        'Go to game start';
       return (
         <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>{description}</button>
+          <button onClick={() => this.jumpTo(move)}>{this.renderMoveDesc(move)}</button>
         </li>
       );
     });
@@ -202,6 +218,7 @@ function calculateWinner(squares) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      // this.highlightSquares();
       return squares[a];
     }
   }
