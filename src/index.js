@@ -194,7 +194,7 @@ class Game extends React.Component {
 
     let status = winner ? 'Winner: ' + winner : 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
     let sortButtonText = this.state.moveSortAsc ? 'Sort descending' : 'Sort ascending';
-    if (this.state.moveSortAsc) {
+    if (!this.state.moveSortAsc) {
       moves.reverse();
     }
 
