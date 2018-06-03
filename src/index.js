@@ -130,9 +130,11 @@ class Game extends React.Component {
       }],
       stepNumber: 0,
       xIsNext: true,
+      moveSortAsc: true,
     };
   }
 
+  //**--- Click Handlers ---**//
   handleClick(i) {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
@@ -150,7 +152,6 @@ class Game extends React.Component {
       }]),
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
-      moveCoords: moveCoords,
     });
   }
 
@@ -161,6 +162,13 @@ class Game extends React.Component {
     });
   }
 
+  toggleSortDir() {
+    this.setState({
+      moveSortAsc: !this.state.moveSortAsc,
+    });
+  }
+
+  //**--- Render Helpers ---**//
   renderMoveDesc(move) {
     const description = move ?
       move === this.state.stepNumber ?
@@ -169,6 +177,8 @@ class Game extends React.Component {
       'Go to game start';
     return description;
   }
+
+
 
   render() {
     const history = this.state.history;
@@ -183,6 +193,10 @@ class Game extends React.Component {
     });
 
     let status = winner ? 'Winner: ' + winner : 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+    let sortButtonText = this.state.moveSortAsc ? 'Sort descending' : 'Sort ascending';
+    if (this.state.moveSortAsc) {
+      moves.reverse();
+    }
 
     return (
       <div className="game">
@@ -194,6 +208,9 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
+          <div>
+            <button onClick={() => this.toggleSortDir()}>{sortButtonText}</button>
+          </div>
           <ol>{moves}</ol>
         </div>
       </div>
