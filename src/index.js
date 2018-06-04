@@ -197,7 +197,11 @@ class Game extends React.Component {
       );
     });
 
-    let status = win ? 'Winner: ' + winner : 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+    let status = win ?
+      'Winner: ' + winner :
+      !current.squares.includes(null) ?
+      'Tie' :
+      'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
     let sortButtonText = this.state.moveSortAsc ? 'Sort descending' : 'Sort ascending';
     if (!this.state.moveSortAsc) {
       moves.reverse();
